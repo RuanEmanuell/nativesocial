@@ -2,9 +2,11 @@
     
 ### What is this? 🤔 
 A mini social network made to train React Native components, Python with Flask and a little of SQL with SQLite.
+
+Still under development.
     
 ### Where can I access it? 🖥
-You can access it <a href="https://github.com/RuanEmanuell/nativesocial">here</a>
+You need to download the files from this directory.
     
 ### Which technologies were used to build it? 🚀 
 <table><tr><td style="padding: 5px;">
@@ -29,9 +31,17 @@ You can access it <a href="https://github.com/RuanEmanuell/nativesocial">here</a
         </div>
     </td></tr></table>
     
-### How to run 🏃
+### How to run (will be updated as the project is developed)🏃
+
+     Linux:
 		Clone the repository.
-		Cd to client and run npm install.
-		Install Python3 and pip
-		After that you will need to install Flask.
-		
+        Execute the "run.sh" file available in the repository and it will automatically run. (Inserting password may be necessary in order to run sudo commands)
+
+    Windows:
+        1 - Install Phyton3 and pip. 
+        2 - Install SQLite 3.
+        3 - After that, you will need to install python-dotenv, flask and flask-cors. 
+        4 - cd to server/database and create "database.db"
+        5 - Execute "setup_db.py"
+        6 - Cd to server and execute the command "flask --app server run" to run the backend server.
+        7 - Open your browser on "http://localhost:5000""
