@@ -22,6 +22,8 @@ sleep 2
 
 cd ../client
 
+npm install
+
 gnome-terminal -- npx react-native start
 
 
