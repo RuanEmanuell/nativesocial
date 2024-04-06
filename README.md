@@ -1,7 +1,7 @@
 ## NativeSocial
     
 ### What is this? 🤔 
-A mini social network made to train React Native components, Python with Flask and a little of SQL with SQLite.
+A mini social network made with React Native, Python with Flask and SQLIte
 
 Still under development.
     
@@ -34,14 +34,17 @@ You need to download the files from this directory.
 ### How to run (will be updated as the project is developed)🏃
 
      Linux:
-		Clone the repository.
-        Execute the "run.sh" file available in the repository and it will automatically run. (Inserting password may be necessary in order to run sudo commands)
+        1 - Clone the repository.
+        2 - Setup <a href="https://reactnative.dev/docs/environment-setup"">React Native</a> and the emulator / device.
+        3 - Execute the "run.sh" file available in the repository and it will automatically run. (Inserting password may be necessary in order to run sudo commands)
 
     Windows:
-        1 - Install Phyton3 and pip. 
-        2 - Install SQLite 3.
-        3 - After that, you will need to install python-dotenv, flask and flask-cors. 
-        4 - cd to server/database and create "database.db"
-        5 - Execute "setup_db.py"
-        6 - Cd to server and execute the command "flask --app server run" to run the backend server.
-        7 - Open your browser on "http://localhost:5000""
+        1 - Setup <a href="https://reactnative.dev/docs/environment-setup"">React Native</a> and the emulator / device.
+        2 - Install Phyton3 and pip. 
+        3 - Install SQLite 3.
+        4 - After that, you will need to install python-dotenv, flask and flask-cors. 
+        5 - cd to server/database and create "database.db"
+        6 - Execute "setup_db.py"
+        7 - Cd to server and execute the command "flask --app server run" to run the backend server.
+        8 - Cd to client and run "npx react-native start"
+

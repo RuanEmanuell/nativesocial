@@ -20,7 +20,9 @@ gnome-terminal -- flask --app server run
 
 sleep 2
 
-firefox http://localhost:5000/
+cd ../client
+
+gnome-terminal -- npx react-native start
 
 
 

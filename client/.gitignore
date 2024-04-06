@@ -1,7 +1,3 @@
-# server
-__pycache__/
-database.db
-
 # OSX
 #
 .DS_Store
@@ -68,3 +64,27 @@ yarn-error.log
 
 # testing
 /coverage
+
+# Dependências instaladas
+client/node_modules
+
+# Arquivos de build
+client/android/build
+client/ios/build
+client/android/app/build
+client/ios/Pods
+client/*.lock
+client/*.log
+client/yarn-error.log
+
+# Arquivos temporários
+client/temp
+client/.DS_Store
+
+# Arquivos de configuração específicos do ambiente
+client/.env
+
+# Arquivos de IDE
+client/.idea
+client/.vscode
+
