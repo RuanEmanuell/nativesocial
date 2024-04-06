@@ -7,7 +7,6 @@ CREATE TABLE users (
 CREATE TABLE posts (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     userId INTEGER NOT NULL,
-    postContent TEXT NOT NULL 
+    postContent TEXT NOT NULL,
     likeCount INTEGER
 );
-

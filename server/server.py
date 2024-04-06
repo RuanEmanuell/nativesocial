@@ -1,5 +1,5 @@
 from string import Template
-from flask import Flask, g
+from flask import Flask, g, jsonify, request
 import sqlite3
 
 app = Flask(__name__)
@@ -20,12 +20,25 @@ def close_connection(exception):
 
 
 @app.route("/")
-def hello_word():
+def get_posts():
     db = get_db()
-    cur = db.execute("SELECT id from users")
-    userIds = cur.fetchall()
-    message = ""
-    for userId in userIds:
-        template = Template('<p>ID: $id</p><br>')
-        message = message + template.substitute(id = userId)
-    return message
+    query = db.execute("SELECT postContent from posts")
+    posts = query.fetchall()
+    all_posts = []
+    for post in posts:
+        all_posts.append(post)
+    return jsonify(all_posts)
+
+@app.route("/post", methods = ["POST"])
+def add_post():
+    data = request.json
+    postContent = data["postContent"]
+    try:
+        db = get_db()
+        db.execute("INSERT INTO posts (userId, postContent, likeCount) VALUES (1, ?, 0)", (postContent,))
+        db.commit()
+        return jsonify({"message": "Sucess"}), 200
+    except Exception as error:
+        print(error)
+        return jsonify({"message": "Internal error"}), 500
+
