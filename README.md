@@ -35,8 +35,8 @@ You need to download the files from this directory.
 
      Linux:
         1 - Clone the repository.
-        2 - Setup <a href="https://reactnative.dev/docs/environment-setup"">React Native</a> and the emulator / device.
-        3 - Execute the "run.sh" file available in the repository and it will automatically run. (Inserting password may be necessary in order to run sudo commands)
+        2 - Setup <a href="https://reactnative.dev/docs/environment-setup"">React Native</a> and the emulator with  Android Studio / your device.
+        3 - Execute the "run.sh" file available in the repository and it will automatically run. (Inserting password may be necessary in order to run sudo commands. Have in mind it was configured to run on Android.)
 
     Windows:
         1 - Setup <a href="https://reactnative.dev/docs/environment-setup"">React Native</a> and the emulator / device.
