@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Button, TextInput } from 'react-native';
+import { View, Text, StyleSheet, Pressable, TextInput, KeyboardAvoidingView, Platform, ScrollView, SafeAreaView } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 function App() {
-  const [posts, setPosts] = useState<string[]>([]);
+  const [posts, setPosts] = useState<any[]>([]);
   const [postContent, setPostContent] = useState<string>("");
 
   async function getPosts() {
@@ -10,6 +11,7 @@ function App() {
       const response = await fetch("http://10.0.2.2:5000");
       const data: string[] = await response.json();
       setPosts(data);
+      console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -26,6 +28,24 @@ function App() {
         )
       }
       );
+      setPostContent("");
+      await getPosts();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function likePost(postId: string, postLikeCount: string) {
+    try {
+      await fetch(
+        "http://10.0.2.2:5000/put", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(
+          { postInfo: { "postId": postId, "postLikeCount": postLikeCount } }
+        )
+      }
+      );
       await getPosts();
     } catch (error) {
       console.log(error);
@@ -37,35 +57,77 @@ function App() {
   }, []);
 
   return (
-    <View style={styles.container}>
-      {posts.length > 0 ? posts.map(post => <Text style={styles.text}>{post}</Text>) : <Text style={styles.text}>Olá, mundo!</Text>}
-      <TextInput
-        value={postContent}
-        onChangeText={(text) => setPostContent(text)}
-      />
-      <Button
-        onPress={addPost}
-        title="Add Post"
-        color="skyblue" />
-    </View>
+    <SafeAreaView style={styles.container}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.container}>
+        <ScrollView contentContainerStyle={styles.scrollViewContent}>
+          <TextInput
+            value={postContent}
+            onChangeText={(text) => setPostContent(text)}
+            multiline={true}
+            style={styles.textInput} />
+          <Pressable
+            onPress={addPost}
+            style={styles.button}>
+            <Text style={{ color: "white" }}>Add post</Text>
+          </Pressable>
+          <View style={styles.postsSection}>
+            {posts.length > 0 ? posts.map(post =>
+              <View style={styles.post}>
+                <Text style={styles.text}>{post["postContent"]}</Text>
+                <View style={{ width: "100%", paddingRight: 5, display: "flex", alignItems: "flex-end" }}>
+                  <Icon.Button
+                    name="thumbs-up"
+                    style={{ width: "15%" }}
+                    onPress={() => likePost(post["postId"], post["likeCount"])}
+                  />
+                </View>
+                <Text style={styles.text}>{post["likeCount"]}</Text>
+              </View>
+            ) : <Text style={styles.text}>Carregando...</Text>}
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#fff',
+  },
+  scrollViewContent: {
+    flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    flexDirection: 'column',
-    backgroundColor: '#fff',
   },
   text: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#333'
+  },
+  textInput: {
+    width: "90%",
+    borderWidth: 2,
+    borderColor: "gray",
+    marginTop: 5
   },
   button: {
-
+    backgroundColor: "blue",
+    marginTop: 5,
+    padding: 10,
+    borderRadius: 5,
+  },
+  postsSection: {
+    marginTop: 5,
+    borderTopWidth: 2,
+    borderTopColor: "gray",
+  },
+  post: {
+    borderBottomWidth: 2,
+    borderBottomColor: "gray"
   }
 });
 

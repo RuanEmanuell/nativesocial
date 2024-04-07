@@ -22,11 +22,17 @@ def close_connection(exception):
 @app.route("/")
 def get_posts():
     db = get_db()
-    query = db.execute("SELECT postContent from posts")
+    query = db.execute("SELECT * from posts")
     posts = query.fetchall()
     all_posts = []
     for post in posts:
-        all_posts.append(post)
+        postData = {
+        "postId": post[0], 
+        "userId": post[1], 
+        "postContent": post[2], 
+        "likeCount": post[3], 
+        }
+        all_posts.append(postData)
     return jsonify(all_posts)
 
 @app.route("/post", methods = ["POST"])
@@ -36,6 +42,21 @@ def add_post():
     try:
         db = get_db()
         db.execute("INSERT INTO posts (userId, postContent, likeCount) VALUES (1, ?, 0)", (postContent,))
+        db.commit()
+        return jsonify({"message": "Sucess"}), 200
+    except Exception as error:
+        print(error)
+        return jsonify({"message": "Internal error"}), 500
+    
+@app.route("/put", methods = ["PUT"])
+def like_post():
+    data = request.json
+    postInfo = data["postInfo"]
+    postId = postInfo["postId"]
+    postLikeCount = postInfo["postLikeCount"]
+    try:
+        db = get_db()
+        db.execute("UPDATE posts SET likeCount = ? WHERE id = ?", (postLikeCount + 1, postId))
         db.commit()
         return jsonify({"message": "Sucess"}), 200
     except Exception as error:
