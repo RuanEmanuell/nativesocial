@@ -30,7 +30,6 @@ function LoginScreen({ navigation }: { navigation: any }) {
       try {
         const response = await fetch(`http://10.0.2.2:5000/loginuser?userName=${encodeURIComponent(userName)}&userEmail=${encodeURIComponent(userEmail)}&userPassword=${encodeURIComponent(userPassword)}`);
         const data = await response.json();
-        console.log(data);
         const userExists: boolean = data["userEmail"] != "";
         if (!userExists) {
           showSnackbar("User does not exists or invalid credentials!");
@@ -71,12 +70,12 @@ function LoginScreen({ navigation }: { navigation: any }) {
             style={styles.textInput} />
           <Pressable
             onPress={() => navigation.navigate("Register")}>
-            <Text style={{ color: "blue" }}>Don't have an account? Create one...</Text>
+            <Text style={{ color: "deepskyblue", marginVertical: 10 }}>Don't have an account? Create one...</Text>
           </Pressable>
           <Pressable
             onPress={loginUser}
             style={styles.button}>
-            <Text style={{ color: "white" }}>Login</Text>
+            <Text style={{ color: "white" }}>Sign in</Text>
           </Pressable>
         </ScrollView>
       </KeyboardAvoidingView>

@@ -72,7 +72,7 @@ def login_user():
 @app.route("/getposts", methods = ["GET"])
 def get_posts():
     db = get_db()
-    query = db.execute("SELECT p.id, p.userId, p.postContent, p.likeCount, u.name FROM posts p LEFT JOIN users u ON p.userId = u.id")
+    query = db.execute("SELECT p.id, p.userId, p.postContent, p.likeCount, u.email, u.name FROM posts p LEFT JOIN users u ON p.userId = u.id")
     posts = query.fetchall()
     all_posts = []
     for post in posts:
@@ -81,7 +81,8 @@ def get_posts():
         "userId": post[1], 
         "postContent": post[2], 
         "likeCount": post[3], 
-        "userName": post[4], 
+        "userEmail" : post[4],
+        "userName": post[5] 
         }
         all_posts.append(postData)
     return jsonify(all_posts)
@@ -113,6 +114,20 @@ def like_post():
     try:
         db = get_db()
         db.execute("UPDATE posts SET likeCount = ? WHERE id = ?", (post_like_count + 1, post_id))
+        db.commit()
+        return jsonify({"message": "Sucess"}), 200
+    except Exception as error:
+        print(error)
+        return jsonify({"message": "Internal error"}), 500
+    
+@app.route("/deletepost", methods = ["DELETE"])
+def delete_post():
+    data = request.json
+    post_info = data["postInfo"]
+    post_id = post_info["postId"]
+    try:
+        db = get_db()
+        db.execute("DELETE FROM posts WHERE id = ?", (post_id,))
         db.commit()
         return jsonify({"message": "Sucess"}), 200
     except Exception as error:

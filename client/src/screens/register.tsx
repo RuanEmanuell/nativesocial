@@ -50,11 +50,7 @@ function RegisterScreen({ navigation }: { navigation: any }) {
                         console.log(error);
                     }
                 } else {
-                    if (data["userName"] != userName) {
-                        showSnackbar("There is another user with this email already!");
-                    } else {
-                        navigation.navigate("Posts", { userName: userName, userEmail: userEmail });
-                    }
+                    showSnackbar("There is another user with this email already!");
                 }
             } catch (error) {
                 console.log(error);
@@ -95,12 +91,12 @@ function RegisterScreen({ navigation }: { navigation: any }) {
                         style={styles.textInput} />
                     <Pressable
                         onPress={() => navigation.navigate("Login")}>
-                        <Text style={{ color: "blue" }}>Already have an account? Sign in</Text>
+                        <Text style={{ color: "deepskyblue", marginVertical: 10 }}>Already have an account? Sign in</Text>
                     </Pressable>
                     <Pressable
                         onPress={createUser}
                         style={styles.button}>
-                        <Text style={{ color: "white" }}>Login</Text>
+                        <Text style={{ color: "white" }}>Sign up</Text>
                     </Pressable>
                 </ScrollView>
             </KeyboardAvoidingView>

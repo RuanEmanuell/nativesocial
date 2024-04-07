@@ -8,6 +8,7 @@ interface Post {
   userId: string;
   postContent: string;
   likeCount: string;
+  userEmail: string;
   userName: string;
 }
 
@@ -29,20 +30,22 @@ function PostScreen({ route, navigation }: { route: any, navigation: any }) {
   }
 
   async function addPost() {
-    try {
-      await fetch(
-        "http://10.0.2.2:5000/addpost", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(
-          { userEmail: userEmail, postContent: postContent }
-        )
+    if (postContent != "") {
+      try {
+        await fetch(
+          "http://10.0.2.2:5000/addpost", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(
+            { userEmail: userEmail, postContent: postContent }
+          )
+        }
+        );
+        setPostContent("");
+        await getPosts();
+      } catch (error) {
+        console.log(error);
       }
-      );
-      setPostContent("");
-      await getPosts();
-    } catch (error) {
-      console.log(error);
     }
   }
 
@@ -54,6 +57,23 @@ function PostScreen({ route, navigation }: { route: any, navigation: any }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(
           { postInfo: { "postId": postId, "postLikeCount": postLikeCount } }
+        )
+      }
+      );
+      await getPosts();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function deletePost(postId: string) {
+    try {
+      await fetch(
+        "http://10.0.2.2:5000/deletepost", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(
+          { postInfo: { "postId": postId } }
         )
       }
       );
@@ -101,6 +121,12 @@ function PostScreen({ route, navigation }: { route: any, navigation: any }) {
                 <View style={{ display: "flex", flexDirection: "row", margin: 5 }}>
                   <Icon name="user" size={24}></Icon>
                   <Text style={{ marginLeft: 5 }}>{post["userName"]}</Text>
+                  {post["userEmail"] == userEmail ? <Icon
+                    name="close"
+                    size={24}
+                    color={"red"}
+                    onPress={() => deletePost(post["postId"])}
+                  /> : <></>}
                 </View>
                 <Text style={styles.postText}>{post["postContent"]}</Text>
                 <View style={{ width: "100%", display: "flex", alignItems: "flex-end", paddingRight: 5 }}>
