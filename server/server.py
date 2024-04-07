@@ -1,6 +1,7 @@
 from string import Template
 from flask import Flask, g, jsonify, request
 import sqlite3
+import hashlib
 
 app = Flask(__name__)
 
@@ -11,6 +12,10 @@ def get_db():
     if db is None:
         db = g._database = sqlite3.connect(DATABASE)
     return db
+
+def encrpyt_password(password):
+    hashed_password = hashlib.sha256(password.encode()).hexdigest()
+    return hashed_password
 
 @app.teardown_appcontext
 def close_connection(exception):
@@ -23,24 +28,46 @@ def get_user():
     user_email = request.args.get("userEmail")
 
     db = get_db()
-    query = db.execute("SELECT u.email FROM users u WHERE u.email = ?", (user_email,))
+    query = db.execute("SELECT u.email, u.name FROM users u WHERE u.email = ?", (user_email,))
     user_exists = query.fetchone()
-    print(user_exists)
-    return jsonify(user_exists)
+    user_data = {
+        "userEmail": user_exists[0] if user_exists else "",
+        "userName" : user_exists[1] if user_exists else ""
+    }
+    return jsonify(user_data)
 
 @app.route("/adduser", methods = ["POST"])
 def add_user():
     data = request.json
     user_name = data["userName"]
     user_email = data["userEmail"]
+    user_password = encrpyt_password(data["userPassword"])
     try:
         db = get_db()
-        db.execute("INSERT INTO users (name, email) VALUES (?, ?)", (user_name, user_email,))
+        db.execute("INSERT INTO users (name, email, password) VALUES (?, ?, ?)", (user_name, user_email,user_password,))
         db.commit()
         return jsonify({"message": "Sucess"}), 200
     except Exception as error:
         print(error)
         return jsonify({"message": "Internal error"}), 500
+
+@app.route("/loginuser", methods = ["GET"])
+def login_user():
+    user_name = request.args.get("userName")
+    user_email = request.args.get("userEmail")
+    user_password = request.args.get("userPassword")
+    print(user_name)
+    
+    db = get_db()
+    query = db.execute("SELECT u.name, u.email, u.password FROM users u WHERE (u.email = ? AND u.name = ? AND u.password = ?)", (user_email,user_name,encrpyt_password(user_password),))
+    user_exists = query.fetchone()
+    user_data = {
+        "userEmail": user_exists[0] if user_exists else "",
+        "userName" : user_exists[1] if user_exists else "",
+        "userPassword" : user_exists[2] if user_exists else ""
+    }
+    return jsonify(user_data)
+
 
 @app.route("/getposts", methods = ["GET"])
 def get_posts():

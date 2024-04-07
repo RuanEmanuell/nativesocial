@@ -1,35 +1,52 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Pressable, TextInput, KeyboardAvoidingView, Platform, ScrollView, SafeAreaView, Dimensions } from 'react-native';
+import Snackbar from 'react-native-snackbar';
 import styles from '../styles/styles';
 
-function LoginScreen({navigation} : {navigation: any}) {
+function LoginScreen({ navigation }: { navigation: any }) {
   const [userName, setUserName] = useState<string>("");
   const [userEmail, setUserEmail] = useState<string>("");
+  const [userPassword, setUserPassword] = useState<string>("");
 
-  async function userLogin(){
-    try {
-      const response = await fetch(`http://10.0.2.2:5000/getuser?userEmail=${encodeURIComponent(userEmail)}`);
-      const data = await response.json();
-      if (!data){
-        try {
-          await fetch(
-            "http://10.0.2.2:5000/adduser", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(
-              { userName: userName, userEmail : userEmail }
-            )
-          }
-          ); 
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    } catch (error) {
-      console.log(error);
+  let snackbarMessage: string = "";
+  let snackbarError: boolean = true;
+
+  async function loginUser() {
+    const regexEmail = /\S+@\S+\.\S+/;
+
+    if (userName.length < 5) {
+      snackbarMessage = "Username needs to be at least 5 characters long!"
+    } else if (!regexEmail.test(userEmail)) {
+      snackbarMessage = "Use a valid email!"
+    } else if (userPassword.length < 6) {
+      snackbarMessage = "Password needs to be at least 6 characters long!"
     }
-    navigation.navigate("Posts", {userName: userName, userEmail: userEmail});
+    else {
+      snackbarError = false;
+    }
+    if (snackbarError) {
+      showSnackbar(snackbarMessage);
+    } else {
+      try {
+        const response = await fetch(`http://10.0.2.2:5000/loginuser?userName=${encodeURIComponent(userName)}&userEmail=${encodeURIComponent(userEmail)}&userPassword=${encodeURIComponent(userPassword)}`);
+        const data = await response.json();
+        console.log(data);
+        const userExists: boolean = data["userEmail"] != "";
+        if (!userExists) {
+          showSnackbar("User does not exists or invalid credentials!");
+        } else {
+          navigation.navigate("Posts", { userName: userName, userEmail: userEmail });
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
   }
+
+  function showSnackbar(snackbarText: string) {
+    Snackbar.show({ text: snackbarText, backgroundColor: "red", textColor: "white" });
+  }
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -47,8 +64,17 @@ function LoginScreen({navigation} : {navigation: any}) {
             onChangeText={(text) => setUserEmail(text)}
             placeholder='Your email'
             style={styles.textInput} />
+          <TextInput
+            value={userPassword}
+            onChangeText={(text) => setUserPassword(text)}
+            placeholder='Your password'
+            style={styles.textInput} />
           <Pressable
-            onPress={userLogin}
+            onPress={() => navigation.navigate("Register")}>
+            <Text style={{ color: "blue" }}>Don't have an account? Create one...</Text>
+          </Pressable>
+          <Pressable
+            onPress={loginUser}
             style={styles.button}>
             <Text style={{ color: "white" }}>Login</Text>
           </Pressable>

@@ -11,12 +11,12 @@ interface Post {
   userName: string;
 }
 
-function PostScreen({route, navigation} : {route:any, navigation:any}) {
+function PostScreen({ route, navigation }: { route: any, navigation: any }) {
   const [posts, setPosts] = useState<null | Post[]>(null);
   const [postContent, setPostContent] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
 
-  const {userName, userEmail} = route.params;
+  const { userName, userEmail } = route.params;
 
   async function getPosts() {
     try {
@@ -79,7 +79,7 @@ function PostScreen({route, navigation} : {route:any, navigation:any}) {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.container}>
         <ScrollView contentContainerStyle={styles.scrollViewContent}>
-          <View style={{ display: "flex", flexDirection: "row", marginLeft: 5 }}>
+          <View style={{ display: "flex", flexDirection: "row" }}>
             <Icon name="user" size={24}></Icon>
             <Text style={{ marginLeft: 5 }}>{userName}</Text>
           </View>
@@ -98,12 +98,12 @@ function PostScreen({route, navigation} : {route:any, navigation:any}) {
               <View
                 key={post["postId"]}
                 style={styles.post}>
-                <View style={{ display: "flex", flexDirection: "row", marginLeft: 5 }}>
+                <View style={{ display: "flex", flexDirection: "row", margin: 5 }}>
                   <Icon name="user" size={24}></Icon>
                   <Text style={{ marginLeft: 5 }}>{post["userName"]}</Text>
                 </View>
                 <Text style={styles.postText}>{post["postContent"]}</Text>
-                <View style={{ width: "100%", display: "flex", alignItems: "flex-end", paddingRight: 10 }}>
+                <View style={{ width: "100%", display: "flex", alignItems: "flex-end", paddingRight: 5 }}>
                   <View style={{ width: "auto" }}>
                     <Icon
                       name="thumbs-up"
