@@ -56,7 +56,6 @@ def login_user():
     user_name = request.args.get("userName")
     user_email = request.args.get("userEmail")
     user_password = request.args.get("userPassword")
-    print(user_name)
     
     db = get_db()
     query = db.execute("SELECT u.name, u.email, u.password FROM users u WHERE (u.email = ? AND u.name = ? AND u.password = ?)", (user_email,user_name,encrpyt_password(user_password),))
@@ -109,11 +108,25 @@ def add_post():
 def like_post():
     data = request.json
     post_info = data["postInfo"]
+    user_email = post_info["userEmail"]
     post_id = post_info["postId"]
     post_like_count = post_info["postLikeCount"]
     try:
         db = get_db()
-        db.execute("UPDATE posts SET likeCount = ? WHERE id = ?", (post_like_count + 1, post_id))
+
+        query = db.execute("SELECT id FROM users WHERE email = ?", (user_email,))
+        user_id = query.fetchone()[0]
+
+        query = db.execute("SELECT * FROM postLikes WHERE userID = ? AND postID = ?", (user_id, post_id,))
+        user_liked = query.fetchone()
+
+        if(user_liked):
+             db.execute("UPDATE posts SET likeCount = ? WHERE id = ?", (post_like_count - 1, post_id))
+             db.execute("DELETE FROM postLikes WHERE userId = ? AND postId = ? ", (user_id, post_id))
+        else:
+             db.execute("UPDATE posts SET likeCount = ? WHERE id = ?", (post_like_count + 1, post_id))
+             db.execute("INSERT INTO postLikes VALUES (?, ?)", (user_id, post_id))
+
         db.commit()
         return jsonify({"message": "Sucess"}), 200
     except Exception as error:

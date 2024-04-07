@@ -11,3 +11,8 @@ CREATE TABLE posts (
     postContent TEXT NOT NULL,
     likeCount INTEGER
 );
+
+CREATE TABLE postLikes(
+    userId INTEGER,
+    postId INTEGER
+)

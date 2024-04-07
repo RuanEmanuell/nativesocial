@@ -49,14 +49,14 @@ function PostScreen({ route, navigation }: { route: any, navigation: any }) {
     }
   }
 
-  async function likePost(postId: string, postLikeCount: string) {
+  async function likePost(userEmail:string, postId: string, postLikeCount: string) {
     try {
       await fetch(
         "http://10.0.2.2:5000/likepost", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(
-          { postInfo: { "postId": postId, "postLikeCount": postLikeCount } }
+          { postInfo: { "userEmail": userEmail, "postId": postId, "postLikeCount": postLikeCount } }
         )
       }
       );
@@ -118,24 +118,28 @@ function PostScreen({ route, navigation }: { route: any, navigation: any }) {
               <View
                 key={post["postId"]}
                 style={styles.post}>
-                <View style={{ display: "flex", flexDirection: "row", margin: 5 }}>
+                <View style={{ display: "flex", flexDirection: "row", margin: 5, width: "100%" }}>
                   <Icon name="user" size={24}></Icon>
                   <Text style={{ marginLeft: 5 }}>{post["userName"]}</Text>
-                  {post["userEmail"] == userEmail ? <Icon
-                    name="close"
-                    size={24}
-                    color={"red"}
-                    onPress={() => deletePost(post["postId"])}
-                  /> : <></>}
+                  {post["userEmail"] == userEmail ?
+                    <View style={{ flex: 1, alignItems: "flex-end"}}>
+                      <Icon
+                        name="close"
+                        size={32}
+                        color={"red"}
+                        style = {{marginRight: 10}}
+                        onPress={() => deletePost(post["postId"])}
+                      />
+                    </View> : <></>}
                 </View>
                 <Text style={styles.postText}>{post["postContent"]}</Text>
-                <View style={{ width: "100%", display: "flex", alignItems: "flex-end", paddingRight: 5 }}>
+                <View style={{ flex: 1, alignItems: "flex-end", paddingRight: 5 }}>
                   <View style={{ width: "auto" }}>
                     <Icon
                       name="thumbs-up"
                       size={24}
                       color={"deepskyblue"}
-                      onPress={() => likePost(post["postId"], post["likeCount"])}
+                      onPress={() => likePost(userEmail, post["postId"], post["likeCount"])}
                     />
                     <Text style={{ textAlign: "center" }}>{post["likeCount"]}</Text>
                   </View>
