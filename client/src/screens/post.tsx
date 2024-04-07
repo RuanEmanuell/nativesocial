@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Pressable, TextInput, KeyboardAvoidingView, Platform, ScrollView, SafeAreaView, Dimensions } from 'react-native';
+import { View, Text, Pressable, TextInput, KeyboardAvoidingView, Platform, ScrollView, SafeAreaView, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import styles from '../styles/styles';
+import postStyle from '../styles/post';
 
 interface Post {
   postId: string;
@@ -16,6 +16,7 @@ function PostScreen({ route, navigation }: { route: any, navigation: any }) {
   const [posts, setPosts] = useState<null | Post[]>(null);
   const [postContent, setPostContent] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
+  const [likedPosts, setLikedPosts] = useState<null | string[]>(null);
 
   const { userName, userEmail } = route.params;
 
@@ -24,10 +25,23 @@ function PostScreen({ route, navigation }: { route: any, navigation: any }) {
       const response = await fetch("http://10.0.2.2:5000/getposts");
       const data: Post[] = await response.json();
       setPosts(data);
+      getUserLikes();
     } catch (error) {
       console.log(error);
     }
   }
+
+  async function getUserLikes() {
+    try {
+      const response = await fetch(`http://10.0.2.2:5000/getuserlikes?userEmail=${userEmail}`);
+      const data: string[] = await response.json();
+      setLikedPosts(data);
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
 
   async function addPost() {
     if (postContent != "") {
@@ -94,11 +108,11 @@ function PostScreen({ route, navigation }: { route: any, navigation: any }) {
   }, [posts]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={postStyle.container}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={styles.container}>
-        <ScrollView contentContainerStyle={styles.scrollViewContent}>
+        style={postStyle.container}>
+        <ScrollView contentContainerStyle={postStyle.scrollViewContent}>
           <View style={{ display: "flex", flexDirection: "row" }}>
             <Icon name="user" size={24}></Icon>
             <Text style={{ marginLeft: 5 }}>{userName}</Text>
@@ -107,24 +121,24 @@ function PostScreen({ route, navigation }: { route: any, navigation: any }) {
             value={postContent}
             onChangeText={(text) => setPostContent(text)}
             multiline={true}
-            style={styles.textInput} />
+            style={postStyle.textInput} />
           <Pressable
             onPress={addPost}
-            style={styles.button}>
+            style={postStyle.button}>
             <Text style={{ color: "white" }}>Add post</Text>
           </Pressable>
-          <View style={styles.postsSection}>
+          <View style={postStyle.postsSection}>
             {!loading ? posts?.map(post =>
               <View
                 key={post["postId"]}
-                style={styles.post}>
+                style={postStyle.post}>
                 <View style={{ display: "flex", flexDirection: "row", margin: 5, width: "100%" }}>
                   <Icon name="user" size={24}></Icon>
                   <Text style={{ marginLeft: 5 }}>{post["userName"]}</Text>
                   {post["userEmail"] == userEmail ?
                     <View style={{ flex: 1, alignItems: "flex-end"}}>
                       <Icon
-                        name="close"
+                        name="trash-o"
                         size={32}
                         color={"red"}
                         style = {{marginRight: 10}}
@@ -132,13 +146,13 @@ function PostScreen({ route, navigation }: { route: any, navigation: any }) {
                       />
                     </View> : <></>}
                 </View>
-                <Text style={styles.postText}>{post["postContent"]}</Text>
+                <Text style={postStyle.postText}>{post["postContent"]}</Text>
                 <View style={{ flex: 1, alignItems: "flex-end", paddingRight: 5 }}>
                   <View style={{ width: "auto" }}>
                     <Icon
                       name="thumbs-up"
                       size={24}
-                      color={"deepskyblue"}
+                      color={likedPosts?.includes(post["postId"]) ? "deepskyblue" : "gray"}
                       onPress={() => likePost(userEmail, post["postId"], post["likeCount"])}
                     />
                     <Text style={{ textAlign: "center" }}>{post["likeCount"]}</Text>

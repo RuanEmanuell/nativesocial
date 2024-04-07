@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Pressable, TextInput, KeyboardAvoidingView, Platform, ScrollView, SafeAreaView, Dimensions } from 'react-native';
 import Snackbar from 'react-native-snackbar';
-import styles from '../styles/styles';
+import loginStyle from '../styles/login';
 
 function RegisterScreen({ navigation }: { navigation: any }) {
     const [userName, setUserName] = useState<string>("");
@@ -64,38 +64,38 @@ function RegisterScreen({ navigation }: { navigation: any }) {
 
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={loginStyle.container}>
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                style={styles.container}>
-                <ScrollView contentContainerStyle={styles.scrollViewContent}>
+                style={loginStyle.container}>
+                <ScrollView contentContainerStyle={loginStyle.scrollViewContent}>
                     <TextInput
                         value={userName}
                         onChangeText={(text) => setUserName(text)}
                         placeholder='Your username'
-                        style={styles.textInput} />
+                        style={loginStyle.textInput} />
                     <TextInput
                         value={userEmail}
                         onChangeText={(text) => setUserEmail(text)}
                         placeholder='Your email'
-                        style={styles.textInput} />
+                        style={loginStyle.textInput} />
                     <TextInput
                         value={userPassword}
                         onChangeText={(text) => setUserPassword(text)}
                         placeholder='Your password'
-                        style={styles.textInput} />
+                        style={loginStyle.textInput} />
                     <TextInput
                         value={userConfirmPassword}
                         onChangeText={(text) => setUserConfirmPassword(text)}
                         placeholder='Confirm your password'
-                        style={styles.textInput} />
+                        style={loginStyle.textInput} />
                     <Pressable
                         onPress={() => navigation.navigate("Login")}>
                         <Text style={{ color: "deepskyblue", marginVertical: 10 }}>Already have an account? Sign in</Text>
                     </Pressable>
                     <Pressable
                         onPress={createUser}
-                        style={styles.button}>
+                        style={loginStyle.button}>
                         <Text style={{ color: "white" }}>Sign up</Text>
                     </Pressable>
                 </ScrollView>

@@ -26,15 +26,18 @@ def close_connection(exception):
 @app.route("/getuser", methods = ["GET"])
 def get_user():
     user_email = request.args.get("userEmail")
-
-    db = get_db()
-    query = db.execute("SELECT u.email, u.name FROM users u WHERE u.email = ?", (user_email,))
-    user_exists = query.fetchone()
-    user_data = {
-        "userEmail": user_exists[0] if user_exists else "",
-        "userName" : user_exists[1] if user_exists else ""
-    }
-    return jsonify(user_data)
+    try:
+        db = get_db()
+        query = db.execute("SELECT u.email, u.name FROM users u WHERE u.email = ?", (user_email,))
+        user_exists = query.fetchone()
+        user_data = {
+            "userEmail": user_exists[0] if user_exists else "",
+            "userName" : user_exists[1] if user_exists else ""
+        }
+        return jsonify(user_data)
+    except Exception as error:
+        print(error)
+        return jsonify({"message": "Internal error"}), 500
 
 @app.route("/adduser", methods = ["POST"])
 def add_user():
@@ -70,21 +73,24 @@ def login_user():
 
 @app.route("/getposts", methods = ["GET"])
 def get_posts():
-    db = get_db()
-    query = db.execute("SELECT p.id, p.userId, p.postContent, p.likeCount, u.email, u.name FROM posts p LEFT JOIN users u ON p.userId = u.id")
-    posts = query.fetchall()
-    all_posts = []
-    for post in posts:
-        postData = {
-        "postId": post[0], 
-        "userId": post[1], 
-        "postContent": post[2], 
-        "likeCount": post[3], 
-        "userEmail" : post[4],
-        "userName": post[5] 
-        }
-        all_posts.append(postData)
-    return jsonify(all_posts)
+    try:
+        db = get_db()
+        query = db.execute("SELECT p.id, p.userId, p.postContent, p.likeCount, u.email, u.name FROM posts p LEFT JOIN users u ON p.userId = u.id")
+        posts = query.fetchall()
+        all_posts = []
+        for post in posts:
+            postData = {
+            "postId": post[0], 
+            "userId": post[1], 
+            "postContent": post[2], 
+            "likeCount": post[3], 
+            "userEmail" : post[4],
+            "userName": post[5] 
+            }
+            all_posts.append(postData)
+        return jsonify(all_posts)
+    except Exception as error:
+        return jsonify({"message": "Internal error"}), 500
 
 @app.route("/addpost", methods = ["POST"])
 def add_post():
@@ -102,6 +108,24 @@ def add_post():
         return jsonify({"message": "Sucess"}), 200
     except Exception as error:
         print(error)
+        return jsonify({"message": "Internal error"}), 500
+
+@app.route("/getuserlikes", methods = ["GET"])
+def get_likes():
+    user_email = request.args.get("userEmail")
+    try:
+        db = get_db()
+        query = db.execute("SELECT id FROM users WHERE email = ?", (user_email,))
+        user_id = query.fetchone()[0]
+
+        query = db.execute("SELECT postId FROM postLikes WHERE userId = ?", (user_id,))
+        posts = query.fetchall()
+        posts = [num for sublist in posts for num in sublist]
+        all_liked_posts = []
+        for liked_post in posts:
+            all_liked_posts.append(liked_post)
+        return jsonify(all_liked_posts)    
+    except Exception as error:
         return jsonify({"message": "Internal error"}), 500
     
 @app.route("/likepost", methods = ["PUT"])

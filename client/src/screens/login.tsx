@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Pressable, TextInput, KeyboardAvoidingView, Platform, ScrollView, SafeAreaView, Dimensions } from 'react-native';
 import Snackbar from 'react-native-snackbar';
-import styles from '../styles/styles';
+import loginStyle from '../styles/login';
 
 function LoginScreen({ navigation }: { navigation: any }) {
   const [userName, setUserName] = useState<string>("");
@@ -48,33 +48,33 @@ function LoginScreen({ navigation }: { navigation: any }) {
 
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={loginStyle.container}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={styles.container}>
-        <ScrollView contentContainerStyle={styles.scrollViewContent}>
+        style={loginStyle.container}>
+        <ScrollView contentContainerStyle={loginStyle.scrollViewContent}>
           <TextInput
             value={userName}
             onChangeText={(text) => setUserName(text)}
             placeholder='Your username'
-            style={styles.textInput} />
+            style={loginStyle.textInput} />
           <TextInput
             value={userEmail}
             onChangeText={(text) => setUserEmail(text)}
             placeholder='Your email'
-            style={styles.textInput} />
+            style={loginStyle.textInput} />
           <TextInput
             value={userPassword}
             onChangeText={(text) => setUserPassword(text)}
             placeholder='Your password'
-            style={styles.textInput} />
+            style={loginStyle.textInput} />
           <Pressable
             onPress={() => navigation.navigate("Register")}>
             <Text style={{ color: "deepskyblue", marginVertical: 10 }}>Don't have an account? Create one...</Text>
           </Pressable>
           <Pressable
             onPress={loginUser}
-            style={styles.button}>
+            style={loginStyle.button}>
             <Text style={{ color: "white" }}>Sign in</Text>
           </Pressable>
         </ScrollView>
