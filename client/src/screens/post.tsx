@@ -36,7 +36,6 @@ function PostScreen({ route, navigation }: { route: any, navigation: any }) {
       const response = await fetch(`http://10.0.2.2:5000/getuserlikes?userEmail=${userEmail}`);
       const data: string[] = await response.json();
       setLikedPosts(data);
-      console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -63,7 +62,7 @@ function PostScreen({ route, navigation }: { route: any, navigation: any }) {
     }
   }
 
-  async function likePost(userEmail:string, postId: string, postLikeCount: string) {
+  async function likePost(userEmail: string, postId: string, postLikeCount: string) {
     try {
       await fetch(
         "http://10.0.2.2:5000/likepost", {
@@ -113,7 +112,7 @@ function PostScreen({ route, navigation }: { route: any, navigation: any }) {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={postStyle.container}>
         <ScrollView contentContainerStyle={postStyle.scrollViewContent}>
-          <View style={{ display: "flex", flexDirection: "row" }}>
+          <View style={{ display: "flex", width: "90%", flexDirection: "row", justifyContent: "flex-start" }}>
             <Icon name="user" size={24}></Icon>
             <Text style={{ marginLeft: 5 }}>{userName}</Text>
           </View>
@@ -121,7 +120,10 @@ function PostScreen({ route, navigation }: { route: any, navigation: any }) {
             value={postContent}
             onChangeText={(text) => setPostContent(text)}
             multiline={true}
-            style={postStyle.textInput} />
+            numberOfLines={4}
+            style={postStyle.textInput}
+            placeholder='Add a post...'
+          />
           <Pressable
             onPress={addPost}
             style={postStyle.button}>
@@ -136,12 +138,12 @@ function PostScreen({ route, navigation }: { route: any, navigation: any }) {
                   <Icon name="user" size={24}></Icon>
                   <Text style={{ marginLeft: 5 }}>{post["userName"]}</Text>
                   {post["userEmail"] == userEmail ?
-                    <View style={{ flex: 1, alignItems: "flex-end"}}>
+                    <View style={{ flex: 1, alignItems: "flex-end" }}>
                       <Icon
                         name="trash-o"
                         size={32}
                         color={"red"}
-                        style = {{marginRight: 10}}
+                        style={{ marginRight: 10 }}
                         onPress={() => deletePost(post["postId"])}
                       />
                     </View> : <></>}

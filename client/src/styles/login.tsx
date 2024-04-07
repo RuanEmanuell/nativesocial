@@ -2,25 +2,26 @@ import { StyleSheet } from 'react-native';
 
 const loginStyle = StyleSheet.create({
     container: {
-      flex: 1,
-      backgroundColor: '#fff',
+        flex: 1,
+        backgroundColor: 'deepskyblue',
     },
     scrollViewContent: {
-      flexGrow: 1,
-      justifyContent: 'center',
-      alignItems: 'center'
+        flexGrow: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     textInput: {
-      width: "90%",
-      borderWidth: 2,
-      borderColor: "gray",
-      marginTop: 5
+        width: "90%",
+        borderWidth: 2,
+        borderColor: "white",
+        marginTop: 5,
+        color: "white"
     },
     button: {
-      backgroundColor: "deepskyblue",
-      marginTop: 5,
-      padding: 10,
-      borderRadius: 5,
+        backgroundColor: "white",
+        marginTop: 5,
+        padding: 10,
+        borderRadius: 5,
     }
 });
 

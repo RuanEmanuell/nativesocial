@@ -53,29 +53,39 @@ function LoginScreen({ navigation }: { navigation: any }) {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={loginStyle.container}>
         <ScrollView contentContainerStyle={loginStyle.scrollViewContent}>
+          <Text style={{ color: "white", margin: 10, fontSize: 48, fontWeight: "bold" }}>NativeSocial</Text>
+          <Text style={{ color: "white", width: "90%", margin: 5 }}>Username</Text>
           <TextInput
             value={userName}
             onChangeText={(text) => setUserName(text)}
-            placeholder='Your username'
-            style={loginStyle.textInput} />
+            placeholder='Your username...'
+            style={loginStyle.textInput}
+            placeholderTextColor={"white"}
+          />
+          <Text style={{ color: "white", width: "90%", margin: 5 }}>Email</Text>
           <TextInput
             value={userEmail}
             onChangeText={(text) => setUserEmail(text)}
-            placeholder='Your email'
-            style={loginStyle.textInput} />
+            placeholder='Your email...'
+            style={loginStyle.textInput}
+            placeholderTextColor={"white"}
+          />
+          <Text style={{ color: "white", width: "90%", margin: 5 }}>Password</Text>
           <TextInput
             value={userPassword}
             onChangeText={(text) => setUserPassword(text)}
-            placeholder='Your password'
-            style={loginStyle.textInput} />
+            placeholder='Your password...'
+            style={loginStyle.textInput}
+            placeholderTextColor={"white"}
+          />
           <Pressable
             onPress={() => navigation.navigate("Register")}>
-            <Text style={{ color: "deepskyblue", marginVertical: 10 }}>Don't have an account? Create one...</Text>
+            <Text style={{ color: "white", marginVertical: 10 }}>Don't have an account? Create one...</Text>
           </Pressable>
           <Pressable
             onPress={loginUser}
             style={loginStyle.button}>
-            <Text style={{ color: "white" }}>Sign in</Text>
+            <Text style={{ color: "deepskyblue" }}>Sign in</Text>
           </Pressable>
         </ScrollView>
       </KeyboardAvoidingView>

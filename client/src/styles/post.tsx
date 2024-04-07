@@ -14,7 +14,7 @@ const postStyle = StyleSheet.create({
     },
     postText: {
       fontSize: 24,
-      marginLeft: 5,
+      margin: 5,
       color: '#333'
     },
     textInput: {
