@@ -35,7 +35,7 @@ def get_posts():
         all_posts.append(postData)
     return jsonify(all_posts)
 
-@app.route("/post", methods = ["POST"])
+@app.route("/addpost", methods = ["POST"])
 def add_post():
     data = request.json
     postContent = data["postContent"]
@@ -48,7 +48,7 @@ def add_post():
         print(error)
         return jsonify({"message": "Internal error"}), 500
     
-@app.route("/put", methods = ["PUT"])
+@app.route("/likepost", methods = ["PUT"])
 def like_post():
     data = request.json
     postInfo = data["postInfo"]

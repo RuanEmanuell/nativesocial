@@ -11,7 +11,6 @@ function App() {
       const response = await fetch("http://10.0.2.2:5000");
       const data: string[] = await response.json();
       setPosts(data);
-      console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -20,7 +19,7 @@ function App() {
   async function addPost() {
     try {
       await fetch(
-        "http://10.0.2.2:5000/post", {
+        "http://10.0.2.2:5000/addpost", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(
@@ -38,7 +37,7 @@ function App() {
   async function likePost(postId: string, postLikeCount: string) {
     try {
       await fetch(
-        "http://10.0.2.2:5000/put", {
+        "http://10.0.2.2:5000/likepost", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(
@@ -74,16 +73,17 @@ function App() {
           </Pressable>
           <View style={styles.postsSection}>
             {posts.length > 0 ? posts.map(post =>
-              <View style={styles.post}>
+              <View
+                key={post["postId"]}
+                style={styles.post}>
                 <Text style={styles.text}>{post["postContent"]}</Text>
-                <View style={{ width: "100%", paddingRight: 5, display: "flex", alignItems: "flex-end" }}>
+                <View style={{ width: "100%", paddingRight: "1%", display: "flex", alignItems: "flex-end" }}>
                   <Icon.Button
                     name="thumbs-up"
-                    style={{ width: "15%" }}
                     onPress={() => likePost(post["postId"], post["likeCount"])}
                   />
                 </View>
-                <Text style={styles.text}>{post["likeCount"]}</Text>
+                <Text style={{textAlign: "right", marginRight: "6%"}}>{post["likeCount"]}</Text>
               </View>
             ) : <Text style={styles.text}>Carregando...</Text>}
           </View>
@@ -122,12 +122,10 @@ const styles = StyleSheet.create({
   },
   postsSection: {
     marginTop: 5,
-    borderTopWidth: 2,
-    borderTopColor: "gray",
   },
   post: {
-    borderBottomWidth: 2,
-    borderBottomColor: "gray"
+    borderTopWidth: 2,
+    borderTopColor: "gray"
   }
 });
 

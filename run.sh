@@ -24,7 +24,12 @@ cd ../client
 
 npm install
 
+cd android
+
+export ANDROID_HOME=$ANDROID_HOME
+
 gnome-terminal -- npx react-native start
 
+yes | sdkmanager --licenses
 
 
