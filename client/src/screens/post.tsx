@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Pressable, TextInput, KeyboardAvoidingView, Platform, ScrollView, SafeAreaView, Dimensions, Modal } from 'react-native';
+import { View, Text, Pressable, TextInput, KeyboardAvoidingView, Platform, ScrollView, SafeAreaView, Dimensions, Modal, RefreshControl, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import postStyle from '../styles/post';
 import StandartButton from '../components/standartbutton';
@@ -19,11 +19,13 @@ function PostScreen({ route, navigation }: { route: any, navigation: any }) {
   const [loading, setLoading] = useState<boolean>(true);
   const [likedPosts, setLikedPosts] = useState<null | string[]>(null);
   const [deleteModalVisible, setDeleteModalVisible] = useState<boolean>(false);
-  const [selectedPostToDelete, setSelectedPostToDelete] = useState<null | string> ( null);
+  const [selectedPostToDelete, setSelectedPostToDelete] = useState<null | string>(null);
+  const [refresh, setRefresh] = useState<boolean>(false);
 
   const { userName, userEmail } = route.params;
 
   async function getPosts() {
+    setPosts(null);
     try {
       const response = await fetch("http://10.0.2.2:5000/getposts");
       const data: Post[] = await response.json();
@@ -82,7 +84,7 @@ function PostScreen({ route, navigation }: { route: any, navigation: any }) {
     }
   }
 
-  function getPostToDelete(postId: string){
+  function getPostToDelete(postId: string) {
     setSelectedPostToDelete(postId);
     setDeleteModalVisible(true);
   }
@@ -105,6 +107,12 @@ function PostScreen({ route, navigation }: { route: any, navigation: any }) {
     }
   }
 
+  async function refreshPosts() {
+    setRefresh(true);
+    await getPosts();
+    setRefresh(false);
+  }
+
   useEffect(() => {
     getPosts();
   }, []);
@@ -112,6 +120,8 @@ function PostScreen({ route, navigation }: { route: any, navigation: any }) {
   useEffect(() => {
     if (posts) {
       setLoading(false);
+    }else{
+      setLoading(true);
     }
   }, [posts]);
 
@@ -120,7 +130,13 @@ function PostScreen({ route, navigation }: { route: any, navigation: any }) {
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={postStyle.container}>
-        <ScrollView contentContainerStyle={postStyle.scrollViewContent}>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={refresh}
+              onRefresh={refreshPosts}></RefreshControl>
+          }
+          contentContainerStyle={postStyle.scrollViewContent}>
           <View style={{ display: "flex", width: "90%", flexDirection: "row", justifyContent: "flex-start" }}>
             <Icon name="user" size={24}></Icon>
             <Text style={{ marginLeft: 5 }}>{userName}</Text>
@@ -140,7 +156,7 @@ function PostScreen({ route, navigation }: { route: any, navigation: any }) {
             color="white"
           />
           <View style={postStyle.postsSection}>
-              <>
+            <>
               {!loading ? posts?.map(post =>
                 <View
                   key={post["postId"]}
@@ -172,39 +188,39 @@ function PostScreen({ route, navigation }: { route: any, navigation: any }) {
                     </View>
                   </View>
                 </View>
-                ): <Text>Carregando...</Text>}
-                <Modal
-                    animationType="fade"
-                    transparent={true}
-                    visible={deleteModalVisible}
-                  >
-                    <View style={postStyle.modalOverlay}>
-                      <View style={postStyle.modalBox}>
-                        <View style={postStyle.modalBoxColumn}>
-                          <Text style={{ fontSize: 18, fontWeight: "bold", marginTop: 5 }}>You sure you want to delete this post?</Text>
-                          <View style={{ flex: 1 }}></View>
-                          <View style={postStyle.modalButtonRow}>
-                            <StandartButton
-                              label='Yes'
-                              onPress={() => deletePost(selectedPostToDelete!)}
-                              color='white'
-                              backgroundColor='green'
-                            />
-                            <View style={{ marginHorizontal: 10 }}></View>
-                            <StandartButton
-                              label='No'
-                              onPress={() => setDeleteModalVisible(false)}
-                              color='white'
-                              backgroundColor='red'
-                            />
-                          </View>
-                        </View>
+              ) : <ActivityIndicator size={100} color = "deepskyblue"/>}
+              <Modal
+                animationType="fade"
+                transparent={true}
+                visible={deleteModalVisible}
+              >
+                <View style={postStyle.modalOverlay}>
+                  <View style={postStyle.modalBox}>
+                    <View style={postStyle.modalBoxColumn}>
+                      <Text style={{ fontSize: 18, fontWeight: "bold", marginTop: 5 }}>You sure you want to delete this post?</Text>
+                      <View style={{ flex: 1 }}></View>
+                      <View style={postStyle.modalButtonRow}>
+                        <StandartButton
+                          label='Yes'
+                          onPress={() => deletePost(selectedPostToDelete!)}
+                          color='white'
+                          backgroundColor='green'
+                        />
+                        <View style={{ marginHorizontal: 10 }}></View>
+                        <StandartButton
+                          label='No'
+                          onPress={() => setDeleteModalVisible(false)}
+                          color='white'
+                          backgroundColor='red'
+                        />
                       </View>
                     </View>
-                  </Modal>
-                  
-              </>
-             
+                  </View>
+                </View>
+              </Modal>
+
+            </>
+
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
