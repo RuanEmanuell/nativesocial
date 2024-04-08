@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Pressable, TextInput, KeyboardAvoidingView, Platform, ScrollView, SafeAreaView, Dimensions } from 'react-native';
+import React, { useState } from 'react';
+import { Text, Pressable, TextInput, KeyboardAvoidingView, Platform, ScrollView, SafeAreaView } from 'react-native';
 import Snackbar from 'react-native-snackbar';
 import loginStyle from '../styles/login';
+import InputAndLabel from '../components/inputlabel';
+import StandartButton from '../components/standartbutton';
 
 function LoginScreen({ navigation }: { navigation: any }) {
   const [userName, setUserName] = useState<string>("");
@@ -53,40 +55,35 @@ function LoginScreen({ navigation }: { navigation: any }) {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={loginStyle.container}>
         <ScrollView contentContainerStyle={loginStyle.scrollViewContent}>
-          <Text style={{ color: "white", margin: 10, fontSize: 48, fontWeight: "bold" }}>NativeSocial</Text>
-          <Text style={{ color: "white", width: "90%", margin: 5 }}>Username</Text>
-          <TextInput
+          <Text style={loginStyle.logo}>NativeSocial</Text>
+          <InputAndLabel
+            label="Username"
             value={userName}
-            onChangeText={(text) => setUserName(text)}
+            setValue={setUserName}
             placeholder='Your username...'
-            style={loginStyle.textInput}
-            placeholderTextColor={"white"}
           />
-          <Text style={{ color: "white", width: "90%", margin: 5 }}>Email</Text>
-          <TextInput
+          <InputAndLabel
+            label="Email"
             value={userEmail}
-            onChangeText={(text) => setUserEmail(text)}
+            setValue={setUserEmail}
             placeholder='Your email...'
-            style={loginStyle.textInput}
-            placeholderTextColor={"white"}
           />
-          <Text style={{ color: "white", width: "90%", margin: 5 }}>Password</Text>
-          <TextInput
+          <InputAndLabel
+            label="Password"
             value={userPassword}
-            onChangeText={(text) => setUserPassword(text)}
+            setValue={setUserPassword}
             placeholder='Your password...'
-            style={loginStyle.textInput}
-            placeholderTextColor={"white"}
           />
           <Pressable
             onPress={() => navigation.navigate("Register")}>
             <Text style={{ color: "white", marginVertical: 10 }}>Don't have an account? Create one...</Text>
           </Pressable>
-          <Pressable
+          <StandartButton
             onPress={loginUser}
-            style={loginStyle.button}>
-            <Text style={{ color: "deepskyblue" }}>Sign in</Text>
-          </Pressable>
+            backgroundColor="white"
+            color="deepskyblue"
+            label="Sign in"
+          />
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>

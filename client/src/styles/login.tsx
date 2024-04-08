@@ -22,7 +22,13 @@ const loginStyle = StyleSheet.create({
         marginTop: 5,
         padding: 10,
         borderRadius: 5,
-    }
+    },
+    logo: {
+        color: "white",
+        margin: 10,
+        fontSize: 48,
+        fontWeight: "bold",
+    },
 });
 
 export default loginStyle;

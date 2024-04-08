@@ -1,25 +1,52 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Pressable, TextInput, KeyboardAvoidingView, Platform, ScrollView, SafeAreaView, Dimensions } from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import styles from '../styles/post';
 
 function PostNavbar({ navigation }: { navigation: any }) {
   return (
-    <View style={{ height: 50, width: "100%", backgroundColor: "deepskyblue", display: "flex", alignItems: "center", flexDirection: "row" }}>
-      <View style={{ width: 40 }}>
+    <View style={styles.container}>
+      <View style={styles.iconContainer}>
         <Icon
           name="exit-to-app"
           size={32}
           color={"white"}
-          style={{ marginLeft: 10, transform: [{ scaleX: -1 }] }}
-          onPress={() => navigation.navigate("Login")}>
-        </Icon>
+          style={styles.icon}
+          onPress={() => navigation.navigate("Login")}
+        />
       </View>
-      <View style={{ flex: 1, alignItems: "center" }}>
-        <Text style={{ color: "white", fontSize: 24, fontWeight: "bold", marginRight: 32 }}>NativeSocial</Text>
+      <View style={styles.titleContainer}>
+        <Text style={styles.title}>NativeSocial</Text>
       </View>
     </View>
   );
 }
 
+const styles = StyleSheet.create({
+  container: {
+    height: 50,
+    width: "100%",
+    backgroundColor: "deepskyblue",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  iconContainer: {
+    width: 40,
+  },
+  icon: {
+    marginLeft: 10,
+    transform: [{ scaleX: -1 }],
+  },
+  titleContainer: {
+    flex: 1,
+    alignItems: "center",
+  },
+  title: {
+    color: "white",
+    fontSize: 24,
+    fontWeight: "bold",
+    marginRight: 32,
+  },
+});
+
 export default PostNavbar;
+1234
