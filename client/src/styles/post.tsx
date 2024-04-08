@@ -23,12 +23,6 @@ const postStyle = StyleSheet.create({
       borderColor: "gray",
       marginTop: 5
     },
-    button: {
-      backgroundColor: "deepskyblue",
-      marginVertical: 10,
-      padding: 10,
-      borderRadius: 5,
-    },
     postsSection: {
       marginVertical: 10,
     },
@@ -37,6 +31,31 @@ const postStyle = StyleSheet.create({
       borderTopWidth: 2,
       borderTopColor: "lightgray",
       paddingVertical: 5,
+    },
+    modalOverlay: {
+      flex: 1,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: "rgba(0, 0, 0, 0.5)", 
+    },
+    modalBox: {
+      width: "90%",
+      height: "15%",
+      backgroundColor: "white",
+      minHeight: 100,
+      borderRadius: 10,
+      alignItems: "center", 
+      justifyContent: "center", 
+    },
+    modalBoxColumn: {
+      flex: 1,
+      flexDirection: "column",
+      alignItems: "center"
+    },
+    modalButtonRow: {
+      flexDirection: "row",
+      padding: 20,
     }
 });
 
