@@ -30,6 +30,7 @@ Você precisa baixar os arquivos desse diretório.
             <p style="color: white; padding: 5px; margin: 0;">Bash</p>
         </div>
     </td></tr></table>
+
 ### Como executar em modo de desenvolvimento 🏃
 
     Linux:

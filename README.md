@@ -31,7 +31,7 @@ You need to download the files from this directory.
         </div>
     </td></tr></table>
     
-### How to run 🏃:
+### How to run 🏃
 
      Linux:
         1 - Clone the repository.
